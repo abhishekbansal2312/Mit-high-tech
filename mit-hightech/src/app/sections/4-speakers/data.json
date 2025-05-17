@@ -1,32 +1,32 @@
 [
   {
-    "name": "Paul Varnedoe",
-    "title": "Principal Customer Solutions Manager at Amazon Web Services (AWS)",
-    "image": "/images/speakers/varnedoe.jpg",
-    "bio": "Paul Varnedoe is a seasoned technology executive with over 20 years of experience in customer success, software development, and program management. As a Principal Customer Solutions Manager at AWS, he leads cloud transformation projects, including a recent $130 million initiative that significantly boosted revenue. Previously, he held leadership roles at major companies like Equifax and Delta Air Lines, focusing on agile frameworks and process optimization. Paul holds a management degree from Georgia Tech and multiple AWS and agile certifications. He is also active in professional networks and hosts podcasts on technology and career development."
+    "name": "Dr. Rohit Garg",
+    "title": "Director, MIT Moradabad",
+    "image": "/images/speakers/rohit.png",
+    "bio": "Dr. Rohit Garg is a dedicated academic leader with over 21 years of teaching and research experience. He excels in curriculum design and innovative pedagogy, and through his dynamic leadership has elevated both educational standards and campus facilities, fostering excellence in student experiences."
   },
   {
-    "name": "Adam Sandor",
-    "title": "Software Engineer at Microsoft",
-    "image": "/images/speakers/sandor.jpg",
-    "bio": "Adam Sandor is a software engineer at Microsoft with 9 years of experience. He's worked on Dynamics 365, Azure Compute, and Az Powershell + CLI. Most of his time is now spent making LLM powered tools and leading AI workshops. Adam's dream project is to contribute to a real-time universal translator. When he's not coding or getting his MBA, Adam loves to practice jodo and dussack."
+    "name": "Dr. Rajul Misra",
+    "title": "HOD, EE Deptt.",
+    "image": "/images/speakers/rajul.png",
+    "bio": "Dr. Rajul Misra brings over 26 years of expertise in electrical machines, with more than 25 peer-reviewed research publications. As Head of the Electrical Engineering Department, he champions cutting-edge research and academic excellence in power systems and machine design."
   },
   {
-    "name": "Roy Hadley Jr",
-    "title": "Senior Special Counsel at Morris, Manning & Manning (MMM)",
-    "image": "/images/speakers/hadley.jpg",
-    "bio": "Roy Hadley Jr is Special Counsel at Morris, Manning & Martin, where he leads the AI/Digital Innovation team.  He is an expert advisor in cybersecurity, risk management, and AI, particularly in data governance, compliance, and incident response. Roy's extensive background includes executive roles at publicly traded companies and legal counsel positions in technology, entertainment, and governmental bodies, including his current role as Special Counsel to the Commonwealth of Virginia for Cybersecurity."
+    "name": "Dr. Manoj Kr. Singh",
+    "title": "Associate Professor, CSE Deptt.",
+    "image": "/images/speakers/manoj.png",
+    "bio": "Dr. Manoj Kr. Singh has over 18 years of experience specializing in hyperspectral image classification, and he has authored more than 25 research papers. His work drives advances in computational imaging and AI-driven analysis."
   },
   {
-    "name": "Dorothea Bozicolona-Volpe",
-    "title": "Strategic Digital Marketing Executive",
-    "image": "/images/speakers/bozicolona-volpe.jpg",
-    "bio": "Dorothéa Bozicolona-Volpe is a strategic digital marketing executive fluent in four languages, specializing in digital transformation, branding, and social media marketing for major global brands. A TED speaker and Webby Awards judge, she has been featured as a marketing expert on CBS and CNN, working with clients like IBM, L’Oréal, and Coca-Cola."
+    "name": "Dhairya Sarswat",
+    "title": "Student, CSE Deptt.",
+    "image": "/images/speakers/dhairya.png",
+    "bio": "Dhairya Sarswat is a third-year CSE student with strong expertise in cybersecurity and Python programming. He actively contributes to campus tech initiatives and leads coding workshops for his peers."
   },
   {
-    "name": "Jay Jung",
-    "title": "Software Engineer",
-    "image": "/images/speakers/jung.jpg",
-    "bio": "Jay Jung is a Staff Software Engineer in Atlanta with experience leading API Fundraising at Meta, scaling AI products at Microsoft, and integrating serverless architectures at Amazon. A keynote speaker at Princeton and a judge/speaker at Harvard, UPenn, and Berkeley, he also runs a successful social media platform with 40K+ followers, offering pre-professional advice."
+    "name": "Shashwat Shinghal",
+    "title": "Student, CSE Deptt.",
+    "image": "/images/speakers/shashwat.png",
+    "bio": "Shashwat Shinghal is a third-year CSE student skilled in front-end development and IoT. He spearheads innovative projects that blend user-centric design with embedded systems."
   }
 ]

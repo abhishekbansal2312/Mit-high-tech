@@ -8,7 +8,7 @@ import Float from "./float";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 
 const Timer = () => {
-  const targetDate = new Date("May 23, 2025 00:00:00").getTime();
+  const targetDate = new Date("May 23, 2025 10:00:00").getTime();
   const [isHovered, setIsHovered] = useState(false);
   const [time, setTime] = useState(new Date());
   const [mounted, setMounted] = useState(false);

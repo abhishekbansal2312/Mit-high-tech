@@ -24,8 +24,9 @@ const Content = () => {
         <h2 className="text-body text-white font-bold mb-2 sm:mb-4">
           CONTACT US
         </h2>
+
         <Link
-          href={"https://www.instagram.com/MIThacks_/"}
+          href={"tel:+919897777123"}
           target="_blank"
           rel="noopener noreferrer"
           className="block text-white text-body-small"
@@ -36,11 +37,11 @@ const Content = () => {
               fontWeight: 600,
             }}
           >
-            INSTAGRAM
+            SHASHWAT SHINGHAL – +91 98977 77123
           </motion.p>
         </Link>
         <Link
-          href={"mailto:contactprojectMIT@gmail.com"}
+          href={"tel:+919410496070"}
           target="_blank"
           rel="noopener noreferrer"
           className="block text-white text-body-small"
@@ -51,9 +52,23 @@ const Content = () => {
               fontWeight: 600,
             }}
           >
-            EMAIL
+            DHAIRYA SARASWAT – +91 94104 96070
           </motion.p>
         </Link>
+        
+        {/* WEBSITE CARETAKER */}
+        <div className="mt-4 sm:mt-6">
+          <motion.p 
+            className="text-white text-body-small opacity-80 font-medium"
+            whileHover={{
+              textShadow: "0px 0px 12.1px #6EB8FF",
+              opacity: 1,
+              fontWeight: 600,
+            }}
+          >
+            Website Maintained by Abhishek Bansal
+          </motion.p>
+        </div>
       </div>
     </div>
   );
