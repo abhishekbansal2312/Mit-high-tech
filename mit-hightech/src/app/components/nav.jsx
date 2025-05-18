@@ -21,7 +21,7 @@ gsap.registerPlugin(ScrollToPlugin);
 const Nav = () => {
   const sections = [
     "about",
-    "tracks",
+    "events",
     "schedule",
     "coordinator",
     "faq",

@@ -33,7 +33,7 @@ event filled with collaboration and learning opportunities.
 
 ## Faculty Coordinators
 - Prof. (Dr.) Rajul Mishra
-- Dr. Manoj Singh
+- Dr. Manoj Kr. Singh
 
 ## Student Coordinators
 - Shashwat Shinghal – +91 98977 77123

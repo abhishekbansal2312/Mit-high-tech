@@ -70,7 +70,7 @@ const Graphics = () => {
           <Image src={asteroid_1_cropped} alt="asteroid" />
           <div className="absolute left-0 top-0 size-full flex items-center justify-center">
             <p className="h-fit w-2/3 text-body text-center font-bold text-white">
-              Codeathon
+            CODEATHON
             </p>
           </div>
           <AnimatePresence>
@@ -82,7 +82,7 @@ const Graphics = () => {
                 className="absolute h-full w-[53vw] top-0 -left-[53vw] pl-[7vw] pr-[5vw] flex flex-col justify-center bg-gradient-to-r from-bg to-transparent"
               >
                 <p className="text-body-small text-white font-bold">
-                  A single-round, time-bound algorithmic coding challenge to sharpen your problem-solving skills and connect with fellow coders. Open to all MIT students.
+                  A Dual-round, time-bound algorithmic coding challenge to sharpen your problem-solving skills and connect with fellow coders. Open to all MIT students.
                 </p>
                 <ul className="hidden md:block mt-2 text-body-small text-white list-disc list-inside">
                   <li>60-minute online contest via proctored Google Meet</li>
@@ -215,7 +215,7 @@ const Graphics = () => {
           <Image src={asteroid_1_cropped} alt="asteroid" />
           <div className="absolute left-0 top-0 size-full flex items-center justify-center">
             <p className="h-fit w-2/3 text-body text-center font-bold text-white">
-              TECHNICAL PRESENTATION
+              TECHXTHON
             </p>
           </div>
           <AnimatePresence>
