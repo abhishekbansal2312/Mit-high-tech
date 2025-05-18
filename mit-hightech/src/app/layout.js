@@ -42,11 +42,11 @@ export const metadata = {
     title: "MIT Hi-Tech Event 2025",
     description:
       "Join us for MIT Hi-Tech Event 2025, a vibrant fusion of technology, creativity, and intellect at Moradabad Institute of Technology.",
-    url: "https://www.mithitech.com",
+    url: "https://hi-tech-mit.vercel.app/",
     site_name: "MIT Hi-Tech Event 2025",
     images: [
       {
-        url: "https://www.mithitech.com/thumbnail.png",
+        url: "https://hi-tech-mit.vercel.app/image.png",
         width: 800,
         height: 800,
         alt: "MIT Hi-Tech Event",
@@ -69,7 +69,7 @@ export default function RootLayout({ children }) {
         />
         <meta
           name="twitter:image"
-          content="https://www.mithitech.com/thumbnail.png"
+          content="https://hi-tech-mit.vercel.app/image.png"
         />
       </Head>
       
