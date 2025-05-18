@@ -13,6 +13,7 @@ import Timer from "./components/timer";
 import { useEffect } from "react";
 import Conveners from "./sections/4-conveners/speakers";
 import Director from "./sections/4-director/speakers";
+import Maintainers from "./sections/6-mainteners/mainteners";
 
 export const raleway = Raleway({
   subsets: ["latin"],
@@ -41,6 +42,7 @@ export default function Home() {
         <Conveners/>
         <Speakers />
         <FAQ />
+        <Maintainers/>
       
         <Footer />
       </main>
