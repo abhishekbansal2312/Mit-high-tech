@@ -4,6 +4,7 @@ import { motion, useInView } from "framer-motion";
 import { Raleway } from "next/font/google";
 import Image from "next/image";
 import { useRef } from "react";
+import Link from "next/link";
 
 import noise from "../../../../public/noise.webp";
 
@@ -17,17 +18,20 @@ const maintainersData = [
   {
     "name": "Shashwat Shinghal",
     "year": "3rd year BTech",
-    "image": "/images/maintainers/shashwat.png" // Replace with actual image path
+    "image": "/images/maintainers/shashwat.png", // Replace with actual image path
+    "linkedin": "https://www.linkedin.com/in/shashwat-shinghal-4a8a6524a/" // Replace with actual LinkedIn URL
   },
   {
     "name": "Abhishek Bansal",
     "year": "4th year BTech",
-    "image": "/images/maintainers/abhishek.png" // Replace with actual image path
+    "image": "/images/maintainers/abhishek.png", // Replace with actual image path
+    "linkedin": "https://www.linkedin.com/in/abhishek-bansal-03ba6b267" // Replace with actual LinkedIn URL
   },
   {
     "name": "Baljeet Singh",
     "year": "3rd year BTech",
-    "image": "/images/maintainers/baljeet.png" // Replace with actual image path
+    "image": "/images/maintainers/baljeet.png", // Replace with actual image path
+    "linkedin": "https://www.linkedin.com/in/baljeet-singh-2361b1260/" // Replace with actual LinkedIn URL
   }
 ];
 
@@ -73,19 +77,23 @@ const Maintainer = ({ maintainer }) => {
         transition: { duration: 0.3 }
       }}
     >
-      {/* Circular Profile Image */}
-      <div className="rounded-full size-32 md:size-40 relative overflow-hidden mb-4 border-2 border-brand-tertiary shadow-lg">
-        <Image
-          src={maintainer.image}
-          alt={maintainer.name}
-          fill
-          className="object-cover object-center"
-        />
-      </div>
+      {/* Circular Profile Image with Gradient Border */}
+      <Link href={maintainer.linkedin} target="_blank" rel="noopener noreferrer">
+        <div className="rounded-full p-[3px] bg-gradient-to-r from-brand-primary via-brand-secondary to-brand-tertiary shadow-lg">
+          <div className="rounded-full size-32 md:size-40 relative overflow-hidden">
+            <Image
+              src={maintainer.image}
+              alt={maintainer.name}
+              fill
+              className="object-cover object-center"
+            />
+          </div>
+        </div>
+      </Link>
       
       {/* Name and Year */}
       <motion.p 
-        className="text-body font-bold text-center"
+        className="text-body font-bold text-center mt-4"
         whileHover={{
           textShadow: "0px 0px 12.1px #6EB8FF",
           scale: 1.05,
@@ -101,3 +109,4 @@ const Maintainer = ({ maintainer }) => {
 };
 
 export default Content;
+

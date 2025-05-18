@@ -1,9 +1,9 @@
 <div align="center">
 
-  <h3 align="center">MIT Hi-Tech Event 2025</h3>
+  <h3 align="center">MIT Hi-Tech 2025</h3>
 
   <p align="center">
-    Join us for MIT Hi-Tech Event 2025, a vibrant fusion of technology, creativity, and intellect at Moradabad Institute of Technology!
+    Join us for MIT Hi-Tech 2025, a vibrant fusion of technology, creativity, and intellect at Moradabad Institute of Technology!
     <br />
     <a href="https://hi-tech-mit.vercel.app/"><strong>Visit website »</strong></a>
     <br />
@@ -13,7 +13,7 @@
 
 ## About
 
-MIT Hi-Tech Event 2025, presented by Moradabad Institute of Technology, is a collection of five exciting technical events 
+MIT Hi-Tech 2025, presented by Moradabad Institute of Technology, is a collection of five exciting technical events 
 hosted at MIT campus. We are committed to bringing students from all branches and years together for an intensive 
 technical showcase where innovation comes to life. Participants can engage in various competitions including Codeathon, 
 Ideathon, Projectathon, Debate & GD, and Technical Presentation while learning and showcasing their skills. Whether you're 

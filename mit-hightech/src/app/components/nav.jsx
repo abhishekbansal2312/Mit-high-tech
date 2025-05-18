@@ -23,7 +23,7 @@ const Nav = () => {
     "about",
     "tracks",
     "schedule",
-    "co-ordinators",
+    "Coordinator",
     "faq",
  
   ];
