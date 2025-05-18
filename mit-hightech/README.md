@@ -1,14 +1,11 @@
 <div align="center">
-  <a href="https://www.MIThacks.com/">
-    <img src="/public/logo.webp" alt="Logo" width="80" height="80">
-  </a>
 
-  <h3 align="center">MIT Hacks</h3>
+  <h3 align="center">MIT Hi-Tech Event 2025</h3>
 
   <p align="center">
-    Join us for MIT Hacks 2025, a 36-hour hackathon at MIT University where innovation comes to life!
+    Join us for MIT Hi-Tech Event 2025, a vibrant fusion of technology, creativity, and intellect at Moradabad Institute of Technology!
     <br />
-    <a href="https://www.MIThacks.com/"><strong>Visit website »</strong></a>
+    <a href="https://hi-tech-mit.vercel.app/"><strong>Visit website »</strong></a>
     <br />
     <br />
   </p>
@@ -16,35 +13,41 @@
 
 ## About
 
-MIT Hacks, presented by PROJECT MIT, is a hackathon hosted at
-MIT University. We are committed to bringing hundreds of students
-together for an intensive 36-hour hackathon where innovation comes
-to life. Participants build cutting-edge applications, websites, and
-digital tools while learning from industry professionals through
-hands-on workshops and mentorship. Whether you&apos;re a first-time
-coder or a seasoned developer, join us to push your creative and
-technical boundaries in this dynamic weekend of building and
-collaboration.
+MIT Hi-Tech Event 2025, presented by Moradabad Institute of Technology, is a collection of five exciting technical events 
+hosted at MIT campus. We are committed to bringing students from all branches and years together for an intensive 
+technical showcase where innovation comes to life. Participants can engage in various competitions including Algoxpert, 
+Ideathon, Projectathon, Debate & GD, and Technical Presentation while learning and showcasing their skills. Whether you're 
+a first-time participant or a seasoned competitor, join us to push your creative and technical boundaries in this dynamic 
+event filled with collaboration and learning opportunities.
 
-## Sponsored by
+## Event Details
 
-<p align="center">
-  <!-- <a href="https://www.jpmorganchase.com/" target="_blank" rel="noopener noreferrer">
-    <img src="/public/images/sponsors/jpmorgan.webp" alt="JPMorganChase" width="120" style="margin: 20px;" />
-  </a> -->
-  <a href="https://www.hyundaiusa.com/us/en" target="_blank" rel="noopener noreferrer">
-    <img src="/public/images/sponsors/hyundai.webp" alt="Hyundai" width="120" style="margin: 20px;" />
-  </a>
-  <a href="https://www.wolframalpha.com/" target="_blank" rel="noopener noreferrer">
-    <img src="/public/images/sponsors/wolframalpha.webp" alt="WolframAlpha" width="120" style="margin: 20px;" />
-  </a>
-  <a href="https://www.itsmarta.com/" target="_blank" rel="noopener noreferrer">
-    <img src="/public/images/sponsors/marta.webp" alt="Marta" width="120" style="margin: 20px;" />
-  </a>
-  <a href="https://cnrit.com/" target="_blank" rel="noopener noreferrer">
-    <img src="/public/images/sponsors/cnr.webp" alt="CNR" width="120" style="margin: 20px;" />
-  </a>
-  <a href="https://www.MITnlp.org/" target="_blank" rel="noopener noreferrer">
-    <img src="/public/images/sponsors/MITnlp.webp" alt="MITNLP" width="120" style="margin: 20px;" />
-  </a>
-</p>
+- **Inauguration Ceremony:** D-Block Auditorium, 10:00 AM | 23rd May 2025 (Thursday)
+
+### Event Line-Up
+1. **ALGOXPERT** - Algorithmic programming competition
+2. **IDEATHON** - Innovative idea presentation challenge
+3. **PROJECTATHON** - Project development showcase
+4. **DEBATE & GD** - Technical debate and group discussions
+5. **TECHNICAL PRESENTATION** - Research and technical concept presentations
+
+## Faculty Coordinators
+- Prof. (Dr.) Rajul Mishra
+- Dr. Manoj Singh
+
+## Student Coordinators
+- Shashwat Shinghal – +91 98977 77123
+- Dhairya Saraswat – +91 94104 96070
+
+## Registration
+
+Participate by filling out the registration form:
+[Google Form Link](https://docs.google.com/forms/d/e/1FAIpQLSfv1eaLcvfTN9NApP7IRDsdtrzjiD4ZVrhLU5xL7XT0lRbC5g/viewform)
+
+Join the WhatsApp group for updates:
+[WhatsApp Group Link](https://chat.whatsapp.com/EYsOKGzhmeMKUSlW1kSdt4)
+
+
+## Site maintained by:
+
+* **Abhishek Bansal**

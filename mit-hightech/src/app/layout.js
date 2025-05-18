@@ -1,5 +1,4 @@
 import "./globals.css";
-
 import { Space_Grotesk } from "next/font/google";
 import Head from "next/head";
 
@@ -9,28 +8,30 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata = {
-  title: "MIT Hacks 2025",
+  title: "MIT Hi-Tech Event 2025",
   description:
-    "Join us for MIT Hacks 2025, a 36-hour hackathon at MIT University where innovation comes to life.",
+    "Join us for MIT Hi-Tech Event 2025, a vibrant fusion of technology, creativity, and intellect at Moradabad Institute of Technology.",
   keywords: [
-    "MIT hacks",
-    "hackathon",
-    "MIT university",
+    "MIT event",
+    "Hi-Tech Event",
+    "Moradabad Institute of Technology",
     "coding",
     "programming",
     "innovation",
-    "MIT hackathon",
-    "atlanta",
-    "MIT university",
+    "MIT technical event",
+    "Moradabad",
+    "Moradabad Institute of Technology",
     "MIT",
-    "software",
+    "Algoxpert",
+    "Ideathon",
+    "Projectathon",
+    "debate",
+    "technical presentation",
     "contest",
     "competition",
-    "atlanta hackathon",
-    "atl hackathon",
-    "atlanta coding",
+    "Moradabad hackathon",
     "computer science",
-    "atlanta"
+    "technology event"
   ],
   robots: {
     index: true,
@@ -38,20 +39,20 @@ export const metadata = {
     googleBot: { index: true, follow: true },
   },
   openGraph: {
-    title: "MIT Hacks 2025",
+    title: "MIT Hi-Tech Event 2025",
     description:
-      "Join us for MIT Hacks 2025, a 36-hour hackathon at MIT University where innovation comes to life.",
-    url: "https://www.MIThacks.com",
-    site_name: "MIT Hacks 2025",
+      "Join us for MIT Hi-Tech Event 2025, a vibrant fusion of technology, creativity, and intellect at Moradabad Institute of Technology.",
+    url: "https://www.mithitech.com",
+    site_name: "MIT Hi-Tech Event 2025",
     images: [
       {
-        url: "https://www.MIThacks.com/thumbnail.png",
+        url: "https://www.mithitech.com/thumbnail.png",
         width: 800,
         height: 800,
-        alt: "MIT Hacks",
+        alt: "MIT Hi-Tech Event",
       },
     ],
-    locale: "en_us",
+    locale: "en_in",
     type: "website",
   },
 };
@@ -61,17 +62,17 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <Head>
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="MIT Hacks 2025" />
+        <meta name="twitter:title" content="MIT Hi-Tech Event 2025" />
         <meta
           name="twitter:description"
-          content="Join us for MIT Hacks 2025, a 36-hour hackathon at MIT University where innovation comes to life."
+          content="Join us for MIT Hi-Tech Event 2025, a vibrant fusion of technology, creativity, and intellect at Moradabad Institute of Technology."
         />
         <meta
           name="twitter:image"
-          content="https://www.MIThacks.com/thumbnail.png"
+          content="https://www.mithitech.com/thumbnail.png"
         />
       </Head>
-
+      
       <body className={`${spaceGrotesk.className} antialiased w-screen bg-bg`}>
         {children}
       </body>
