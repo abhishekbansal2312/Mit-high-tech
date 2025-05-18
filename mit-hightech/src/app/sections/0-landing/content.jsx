@@ -79,9 +79,9 @@ const Content = () => {
               scale: isHovered ? 1.05 : 1
             }}
             transition={{ duration: 0.3 }}
-            className="relative flex items-center justify-center font-bold text-brand-primary z-10 px-6 py-3 sm:px-8 sm:py-4 backdrop-blur-md rounded-md sm:rounded-lg border-2 border-white/20 shadow-lg hover:shadow-xl"
+            className="relative flex items-center justify-center font-bold text-brand-primary z-10 px-6 py-3 sm:px-4 sm:py-2 backdrop-blur-md rounded-md sm:rounded-lg border-2 border-white/20 shadow-lg hover:shadow-xl"
           >
-            <span className="text-xl sm:text-2xl tracking-wider">REGISTER NOW</span>
+            <span className="text-lg sm:text-2xl tracking-wider">REGISTER NOW</span>
           </motion.div>
         </Link>
       </motion.div>
