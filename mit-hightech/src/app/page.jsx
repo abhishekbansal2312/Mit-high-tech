@@ -11,6 +11,8 @@ import Footer from "./sections/7-footer/footer";
 import { Raleway } from "next/font/google";
 import Timer from "./components/timer";
 import { useEffect } from "react";
+import Conveners from "./sections/4-conveners/speakers";
+import Director from "./sections/4-director/speakers";
 
 export const raleway = Raleway({
   subsets: ["latin"],
@@ -35,6 +37,8 @@ export default function Home() {
         </section>
         <Tracks />
         <Schedule />
+        <Director/>
+        <Conveners/>
         <Speakers />
         <FAQ />
       

@@ -22,7 +22,7 @@ export const metadata = {
     "Moradabad",
     "Moradabad Institute of Technology",
     "MIT",
-    "Algoxpert",
+    "Codeathon",
     "Ideathon",
     "Projectathon",
     "debate",

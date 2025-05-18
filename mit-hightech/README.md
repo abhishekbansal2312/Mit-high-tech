@@ -15,7 +15,7 @@
 
 MIT Hi-Tech Event 2025, presented by Moradabad Institute of Technology, is a collection of five exciting technical events 
 hosted at MIT campus. We are committed to bringing students from all branches and years together for an intensive 
-technical showcase where innovation comes to life. Participants can engage in various competitions including Algoxpert, 
+technical showcase where innovation comes to life. Participants can engage in various competitions including Codeathon, 
 Ideathon, Projectathon, Debate & GD, and Technical Presentation while learning and showcasing their skills. Whether you're 
 a first-time participant or a seasoned competitor, join us to push your creative and technical boundaries in this dynamic 
 event filled with collaboration and learning opportunities.
@@ -25,7 +25,7 @@ event filled with collaboration and learning opportunities.
 - **Inauguration Ceremony:** D-Block Auditorium, 10:00 AM | 23rd May 2025 (Thursday)
 
 ### Event Line-Up
-1. **ALGOXPERT** - Algorithmic programming competition
+1. **Codeathon** - Algorithmic programming competition
 2. **IDEATHON** - Innovative idea presentation challenge
 3. **PROJECTATHON** - Project development showcase
 4. **DEBATE & GD** - Technical debate and group discussions

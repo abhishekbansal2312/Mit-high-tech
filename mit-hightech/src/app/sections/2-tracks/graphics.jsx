@@ -70,7 +70,7 @@ const Graphics = () => {
           <Image src={asteroid_1_cropped} alt="asteroid" />
           <div className="absolute left-0 top-0 size-full flex items-center justify-center">
             <p className="h-fit w-2/3 text-body text-center font-bold text-white">
-              ALGOXPERT
+              Codeathon
             </p>
           </div>
           <AnimatePresence>

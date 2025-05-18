@@ -41,7 +41,7 @@ const AboutContent = () => {
           className={`${raleway.className} p-5 md:p-10 bg-[#ffffffaa] backdrop-blur-[33px] drop-shadow-lg rounded-[16px] md:rounded-[30px]`}
         >
           <p className="text-body font-medium text-black">
-            HI-TECH EVENT 2025, proudly presented by MORADABAD INSTITUTE OF TECHNOLOGY, is a vibrant fusion of technology, creativity, and intellect. This exciting event brings together students from all branches and years for a day of innovation and competition. Featuring five thrilling events - ALGOXPERT, IDEATHON, PROJECTATHON, DEBATE & GD, and TECHNICAL PRESENTATION - participants will showcase their skills, push creative boundaries, and collaborate with peers. Whether you&apos;re a first-year student or a graduating senior, join us at the D-Block Auditorium on May 23rd, 2025 to be part of this extraordinary celebration of technology and academic excellence.
+            HI-TECH EVENT 2025, proudly presented by MORADABAD INSTITUTE OF TECHNOLOGY, is a vibrant fusion of technology, creativity, and intellect. This exciting event brings together students from all branches and years for a day of innovation and competition. Featuring five thrilling events - Codeathon, IDEATHON, PROJECTATHON, DEBATE & GD, and TECHNICAL PRESENTATION - participants will showcase their skills, push creative boundaries, and collaborate with peers. Whether you&apos;re a first-year student or a graduating senior, join us at the D-Block Auditorium on May 23rd, 2025 to be part of this extraordinary celebration of technology and academic excellence.
           </p>
         </motion.div>
       </Parallax>
