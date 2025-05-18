@@ -25,6 +25,7 @@ const Nav = () => {
     "schedule",
     "coordinator",
     "faq",
+    "developers"
  
   ];
   const [currSection, setCurrSection] = useState(null);
