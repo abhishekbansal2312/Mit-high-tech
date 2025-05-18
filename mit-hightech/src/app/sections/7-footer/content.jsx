@@ -58,48 +58,48 @@ const Content = () => {
         
         {/* WEBSITE CARETAKER */}
         <div className="mt-4 sm:mt-6">
-          <p className="text-white text-body-small opacity-80 font-medium mb-1">
-            Site maintained by:
-          </p>
-          <ul className="list-none pl-0">
-            <li>
-              <motion.p 
-                className="text-white text-body-small opacity-80 font-medium"
-                whileHover={{
-                  textShadow: "0px 0px 12.1px #6EB8FF",
-                  opacity: 1,
-                  fontWeight: 600,
-                }}
-              >
-                Shashwat Shinghal
-              </motion.p>
-            </li>
-            <li>
-              <motion.p 
-                className="text-white text-body-small opacity-80 font-medium"
-                whileHover={{
-                  textShadow: "0px 0px 12.1px #6EB8FF",
-                  opacity: 1,
-                  fontWeight: 600,
-                }}
-              >
-                Abhishek Bansal
-              </motion.p>
-            </li>
-            <li>
-              <motion.p 
-                className="text-white text-body-small opacity-80 font-medium"
-                whileHover={{
-                  textShadow: "0px 0px 12.1px #6EB8FF",
-                  opacity: 1,
-                  fontWeight: 600,
-                }}
-              >
-                Baljeet Singh
-              </motion.p>
-            </li>
-          </ul>
-        </div>
+  <p className="text-white text-body-small opacity-80 font-medium mb-1">
+    Site maintained by:
+  </p>
+  <ul className="list-none pl-0">
+    <li>
+      <motion.p 
+        className="text-white text-body-small opacity-80 font-medium"
+        whileHover={{
+          textShadow: "0px 0px 12.1px #6EB8FF",
+          opacity: 1,
+          fontWeight: 600,
+        }}
+      >
+        Shashwat Shinghal - 3rd year BTech
+      </motion.p>
+    </li>
+    <li>
+      <motion.p 
+        className="text-white text-body-small opacity-80 font-medium"
+        whileHover={{
+          textShadow: "0px 0px 12.1px #6EB8FF",
+          opacity: 1,
+          fontWeight: 600,
+        }}
+      >
+        Abhishek Bansal - 4th year BTech
+      </motion.p>
+    </li>
+    <li>
+      <motion.p 
+        className="text-white text-body-small opacity-80 font-medium"
+        whileHover={{
+          textShadow: "0px 0px 12.1px #6EB8FF",
+          opacity: 1,
+          fontWeight: 600,
+        }}
+      >
+        Baljeet Singh - 3rd year BTech
+      </motion.p>
+    </li>
+  </ul>
+</div>
       </div>
     </div>
   );
