@@ -1,8 +1,12 @@
 "use client";
 
 import { easeOut, motion } from "framer-motion";
+import Link from "next/link";
+import { useState } from "react";
 
 const Content = () => {
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
     <div className="absolute left-[8vw] top-[120px] sm:top-[14vh] xl:top-[100px] inline-block z-40">
       {/* TITLE */}
@@ -51,6 +55,35 @@ const Content = () => {
         className="mt-6"
       >
         <p className="text-white text-lg font-bold">D-Block Auditorium | 10:00 AM</p>
+      </motion.div>
+
+      {/* REGISTER BUTTON */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1, delay: 4, ease: "easeOut" }}
+        className="mt-8"
+      >
+        <Link
+          href="https://docs.google.com/forms/d/e/1FAIpQLSfv1eaLcvfTN9NApP7IRDsdtrzjiD4ZVrhLU5xL7XT0lRbC5g/viewform?usp=sharing&ouid=106007621048068235427"
+          target="_blank"
+          rel="noopener noreferrer"
+          onMouseEnter={() => {
+            setIsHovered(true);
+          }}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          <motion.div
+            animate={{ 
+              background: isHovered ? "rgba(255, 255, 255, 0.95)" : "rgba(255, 255, 255, 0.8)",
+              scale: isHovered ? 1.05 : 1
+            }}
+            transition={{ duration: 0.3 }}
+            className="relative flex items-center justify-center font-bold text-brand-primary z-10 px-6 py-3 sm:px-8 sm:py-4 backdrop-blur-md rounded-md sm:rounded-lg border-2 border-white/20 shadow-lg hover:shadow-xl"
+          >
+            <span className="text-xl sm:text-2xl tracking-wider">REGISTER NOW</span>
+          </motion.div>
+        </Link>
       </motion.div>
     </div>
   );
