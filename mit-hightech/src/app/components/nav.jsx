@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link"; // Import the Link component
+import Link from "next/link";
 import {
   animate,
   AnimatePresence,
@@ -9,12 +9,12 @@ import {
   useInView,
 } from "framer-motion";
 import { gsap } from "gsap";
-
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { useEffect, useRef, useState } from "react";
 import logo from "../../../public/image.png";
 import Image from "next/image";
-import { IconX, IconMenuDeep } from "@tabler/icons-react";
+import { IconX, IconMenuDeep, IconLogin, IconUserPlus, IconLogout } from "@tabler/icons-react";
+import { SignInButton, SignUpButton, useAuth, useClerk } from "@clerk/nextjs";
 
 gsap.registerPlugin(ScrollToPlugin);
 
@@ -24,14 +24,12 @@ const Nav = () => {
     "events",
     "schedule",
     "coordinator",
-    "faq",
     "developers"
- 
   ];
   const [currSection, setCurrSection] = useState(null);
   const [indicatorStyle, setIndicatorStyle] = useState({});
-
   const [isClicked, setIsClicked] = useState(false);
+  const { isSignedIn } = useAuth();
 
   // Update the indicator style as currSection changes
   useEffect(() => {
@@ -68,11 +66,23 @@ const Nav = () => {
           className="hidden md:block bg-white h-[2px] sm:h-[3px] w-10 fixed top-[45px] md:top-[70px]"
         />
 
-        <ul className="flex w-full max-w-[800px] items-center justify-between">
+        <ul className="flex w-full max-w-[900px] items-center justify-between">
           {sections.map((name, i) => (
             <NavItem name={name} setCurrSection={setCurrSection} key={i} />
           ))}
-          <ApplyButton />
+          <div className="flex items-center gap-4">
+            {!isSignedIn ? (
+              <>
+                <ClerkAuthButton type="signin" />
+                <ClerkAuthButton type="signup" />
+              </>
+            ) : (
+              <>
+                <ApplyButton />
+                <LogoutButton />
+              </>
+            )}
+          </div>
         </ul>
       </motion.nav>
 
@@ -135,18 +145,63 @@ const Nav = () => {
                   <NavItem name={name} setCurrSection={setCurrSection} />
                 </motion.div>
               ))}
-              <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{
-                  delay: sections.length * 0.05,
-                  duration: 0.5,
-                  ease: "easeOut",
-                }}
-              >
-                <ApplyButton />
-              </motion.div>
+              <div className="flex flex-col gap-4 items-end">
+                {!isSignedIn ? (
+                  <>
+                    <motion.div
+                      initial={{ opacity: 0, y: -20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{
+                        delay: sections.length * 0.05,
+                        duration: 0.5,
+                        ease: "easeOut",
+                      }}
+                    >
+                      <ClerkAuthButton type="signin" />
+                    </motion.div>
+                    <motion.div
+                      initial={{ opacity: 0, y: -20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{
+                        delay: sections.length * 0.05 + 0.1,
+                        duration: 0.5,
+                        ease: "easeOut",
+                      }}
+                    >
+                      <ClerkAuthButton type="signup" />
+                    </motion.div>
+                  </>
+                ) : (
+                  <>
+                    <motion.div
+                      initial={{ opacity: 0, y: -20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{
+                        delay: sections.length * 0.05,
+                        duration: 0.5,
+                        ease: "easeOut",
+                      }}
+                    >
+                      <ApplyButton />
+                    </motion.div>
+                    <motion.div
+                      initial={{ opacity: 0, y: -20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{
+                        delay: sections.length * 0.05 + 0.1,
+                        duration: 0.5,
+                        ease: "easeOut",
+                      }}
+                    >
+                      <LogoutButton />
+                    </motion.div>
+                  </>
+                )}
+              </div>
             </ul>
           )}
         </AnimatePresence>
@@ -195,48 +250,157 @@ const NavItem = ({ name, setCurrSection }) => {
   );
 };
 
+const ClerkAuthButton = ({ type }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const text = type === "signin" ? "SIGN IN" : "SIGN UP";
+  const hoverText = type === "signin" ? "LOGIN" : "JOIN";
+  const icon = type === "signin" ? <IconLogin size={16} /> : <IconUserPlus size={16} />;
+  const href = type === "signin" ? "/sign-in" : "/sign-up";
+
+  useEffect(() => {
+    const selector = `.stagger-letter-${type}-1`;
+    const selectorHover = `.stagger-letter-${type}-2`;
+    
+    animate(
+      selector,
+      { y: isHovered ? -28 : 0, opacity: isHovered ? 0 : 1 },
+      { delay: stagger(0.03, { ease: "easeOut" }), ease: "circOut" }
+    );
+    animate(
+      selectorHover,
+      { y: isHovered ? -28 : 0, opacity: isHovered ? 1 : 0 },
+      { delay: stagger(0.03, { ease: "easeOut" }), ease: "circOut" }
+    );
+  }, [isHovered, type]);
+
+  return (
+    <Link href={href}>
+      <motion.div
+        animate={{ 
+          background: isHovered ? "#ffffffff" : "#ffffffcc",
+          borderColor: isHovered ? "#6EB8FF" : "transparent"
+        }}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        className="relative font-bold text-brand-primary z-10 px-2 py-1 sm:px-4 sm:py-2 backdrop-blur-md rounded-md sm:rounded-lg border-2 flex items-center gap-2 cursor-pointer"
+      >
+        {icon}
+        <div className="overflow-hidden leading-none text-[14px] sm:text-[18px] h-[14px] sm:h-[18px]">
+          <div className="mb-2">
+            {text.split("").map((char, i) => (
+              <div className={`stagger-letter-${type}-1 inline-block`} key={i}>
+                {char}
+              </div>
+            ))}
+          </div>
+          <div>
+            {hoverText.split("").map((char, i) => (
+              <div className={`stagger-letter-${type}-2 inline-block`} key={i}>
+                {char}
+              </div>
+            ))}
+          </div>
+        </div>
+      </motion.div>
+    </Link>
+  );
+};
+
+const LogoutButton = () => {
+  const [isHovered, setIsHovered] = useState(false);
+  const { signOut } = useClerk();
+
+  useEffect(() => {
+    animate(
+      ".stagger-letter-logout-1",
+      { y: isHovered ? -28 : 0, opacity: isHovered ? 0 : 1 },
+      { delay: stagger(0.03, { ease: "easeOut" }), ease: "circOut" }
+    );
+    animate(
+      ".stagger-letter-logout-2",
+      { y: isHovered ? -28 : 0, opacity: isHovered ? 1 : 0 },
+      { delay: stagger(0.03, { ease: "easeOut" }), ease: "circOut" }
+    );
+  }, [isHovered]);
+
+  const handleLogout = () => {
+    signOut();
+  };
+
+  return (
+    <motion.div
+      animate={{ 
+        background: isHovered ? "#ffffffff" : "#ffffffcc",
+        borderColor: isHovered ? "#6EB8FF" : "transparent"
+      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onClick={handleLogout}
+      className="relative font-bold text-brand-primary z-10 px-2 py-1 sm:px-4 sm:py-2 backdrop-blur-md rounded-md sm:rounded-lg border-2 flex items-center gap-2 cursor-pointer"
+    >
+      <IconLogout size={16} />
+      <div className="overflow-hidden leading-none text-[14px] sm:text-[18px] h-[14px] sm:h-[18px]">
+        <div className="mb-2">
+          {"LOGOUT".split("").map((char, i) => (
+            <div className="stagger-letter-logout-1 inline-block" key={i}>
+              {char}
+            </div>
+          ))}
+        </div>
+        <div>
+          {"EXIT".split("").map((char, i) => (
+            <div className="stagger-letter-logout-2 inline-block" key={i}>
+              {char}
+            </div>
+          ))}
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
 const ApplyButton = () => {
   const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     animate(
-      ".stagger-letter-1",
+      ".stagger-letter-apply-1",
       { y: isHovered ? -28 : 0, opacity: isHovered ? 0 : 1 },
       { delay: stagger(0.03, { ease: "easeOut" }), ease: "circOut" }
     );
     animate(
-      ".stagger-letter-2",
+      ".stagger-letter-apply-2",
       { y: isHovered ? -28 : 0, opacity: isHovered ? 1 : 0 },
       { delay: stagger(0.03, { ease: "easeOut" }), ease: "circOut" }
     );
-  });
+  }, [isHovered]);
 
   return (
     <Link
-      href="https://docs.google.com/forms/d/e/1FAIpQLSfv1eaLcvfTN9NApP7IRDsdtrzjiD4ZVrhLU5xL7XT0lRbC5g/viewform?usp=sharing&ouid=106007621048068235427
-"
+      href="https://docs.google.com/forms/d/e/1FAIpQLSfv1eaLcvfTN9NApP7IRDsdtrzjiD4ZVrhLU5xL7XT0lRbC5g/viewform?usp=sharing&ouid=106007621048068235427"
       target="_blank"
       rel="noopener noreferrer"
-      onMouseEnter={() => {
-        setIsHovered(true);
-      }}
+      onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <motion.div
-        animate={{ background: isHovered ? "#ffffffff" : "#ffffffcc" }}
+        animate={{ 
+          background: isHovered ? "#ffffffff" : "#ffffffcc",
+          boxShadow: isHovered ? "0px 0px 12px 0px #6EB8FF" : "none" 
+        }}
         className="relative font-bold text-brand-primary z-10 px-2 py-1 sm:px-4 sm:py-2 backdrop-blur-md rounded-md sm:rounded-lg"
       >
         <div className="overflow-hidden leading-none text-[14px] sm:text-[20px] h-[14px] sm:h-[20px]">
           <div className="mb-2">
             {"Register".split("").map((char, i) => (
-              <div className="stagger-letter-1 inline-block" key={i}>
+              <div className="stagger-letter-apply-1 inline-block" key={i}>
                 {char}
               </div>
             ))}
           </div>
           <div>
             {"APPLY".split("").map((char, i) => (
-              <div className="stagger-letter-2 inline-block" key={i}>
+              <div className="stagger-letter-apply-2 inline-block" key={i}>
                 {char}
               </div>
             ))}
