@@ -1,8 +1,7 @@
 "use client";
-
 import Image from "next/image";
 import { useRef } from "react";
-import Parallax from "@/app/components/parallax";
+import Parallax from "../../components/parallax";
 import {
   asteroid,
   astronaut,
@@ -15,7 +14,7 @@ import {
   planet_br_2,
   rocket,
 } from "./graphicsData";
-import Float from "@/app/components/float";
+import Float from "../../components/float";
 import { motion } from "framer-motion";
 
 const Graphics = () => {

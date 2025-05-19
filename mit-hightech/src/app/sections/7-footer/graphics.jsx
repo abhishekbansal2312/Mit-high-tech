@@ -1,6 +1,6 @@
 "use client";
 
-import Parallax from "@/app/components/parallax";
+import Parallax from "../../components/parallax";
 import Image from "next/image";
 import { useRef } from "react";
 

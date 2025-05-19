@@ -1,6 +1,6 @@
 "use client";
 
-import Parallax from "@/app/components/parallax";
+import Parallax from "../../components/parallax";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { useRef, useState } from "react";

@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import Content from "./content";
-import Parallax from "@/app/components/parallax";
+import Parallax from "../../components/parallax";
 import Graphics from "./graphics";
 
 const Landing = () => {

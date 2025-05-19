@@ -1,6 +1,6 @@
 "use client";
 
-import Parallax from "@/app/components/parallax";
+import Parallax from "../../components/parallax";
 import { motion, useInView } from "framer-motion";
 import { Raleway } from "next/font/google";
 import { useRef } from "react";

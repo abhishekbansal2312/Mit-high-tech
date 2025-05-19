@@ -1,7 +1,7 @@
 "use client";
 
 import { SignUp } from '@clerk/nextjs';
-import Graphics from '@/app/sections/0-landing/graphics';
+import Graphics from '../../sections/0-landing/graphics';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import logo from '../../../../public/image.png';
