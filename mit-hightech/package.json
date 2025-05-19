@@ -21,6 +21,7 @@
     "@tabler/icons-react": "^3.24.0",
     "framer-motion": "^11.11.10",
     "gsap": "^3.12.5",
+    "immer": "^10.1.1",
     "lenis": "^1.1.14",
     "locomotive-scroll": "^5.0.0-beta.21",
     "next": "^14.2.16",
@@ -28,7 +29,8 @@
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-lottie": "^1.2.10"
+    "react-lottie": "^1.2.10",
+    "use-immer": "^0.11.0"
   },
   "devDependencies": {
     "@types/node": "^22.15.19",
