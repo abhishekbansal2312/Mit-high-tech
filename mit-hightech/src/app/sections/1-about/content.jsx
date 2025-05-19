@@ -1,10 +1,10 @@
 "use client";
 
-import Parallax from "@/app/components/parallax";
+import Parallax from "../../components/parallax";
 import { useRef } from "react";
 import { useInView, motion } from "framer-motion";
 import noise from "../../../../public/noise.webp";
-import { raleway } from "@/app/page";
+import { raleway } from "../../components/fonts";
 
 const AboutContent = () => {
   const container = useRef(null);

@@ -1,6 +1,6 @@
 "use client";
 
-import { raleway } from "@/app/page";
+import { raleway } from "../../components/fonts";
 import { IconCaretDownFilled } from "@tabler/icons-react";
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useRef } from "react";
-import Parallax from "@/app/components/parallax";
+import Parallax from "../../components/parallax";
 import {
   bg,
   alien_l,

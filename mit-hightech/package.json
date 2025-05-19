@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@clerk/clerk-react": "^5.31.4",
+    "@clerk/nextjs": "^6.19.4",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^6.4.1",
@@ -29,6 +31,7 @@
     "react-lottie": "^1.2.10"
   },
   "devDependencies": {
+    "@types/node": "^22.15.19",
     "eslint": "^8",
     "eslint-config-next": "14.2.14",
     "postcss": "^8",

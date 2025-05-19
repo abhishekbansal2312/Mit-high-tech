@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useRef } from "react";
-import Parallax from "@/app/components/parallax";
+import Parallax from "../../components/parallax";
 import {
   bg,
   cloud_br,
@@ -13,7 +13,7 @@ import {
   planet_bl,
   ufo,
 } from "./graphicsData";
-import Float from "@/app/components/float";
+import Float from "../../components/float";
 import { motion } from "framer-motion";
 
 const Graphics = () => {

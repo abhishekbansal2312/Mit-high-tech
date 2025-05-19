@@ -1,3 +1,6 @@
+import {
+  ClerkProvider,
+} from '@clerk/nextjs'
 import "./globals.css";
 import { Space_Grotesk } from "next/font/google";
 import Head from "next/head";
@@ -59,6 +62,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
+    <ClerkProvider>
     <html lang="en">
       <Head>
         <meta name="twitter:card" content="summary_large_image" />
@@ -77,5 +81,6 @@ export default function RootLayout({ children }) {
         {children}
       </body>
     </html>
+    </ClerkProvider>
   );
 }
