@@ -1,9 +1,10 @@
 import _ from "lodash";
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { useImmer } from "use-immer";
 import { TargetAndTransition } from "framer-motion";
 import { WritableDraft } from "immer";
 import { v4 } from "uuid";
+import { useUser } from "@clerk/nextjs";
 
 const HEIGHT = 64;
 const WIDTH = 92;
@@ -67,7 +68,12 @@ const defaultState = {
     distance: 1.1,
     step: 5,
   },
+  highScore: 0,
+  username: '',
+  isGameOver: false,
+  scoresFetched: false // Add a flag to track if scores have been fetched
 };
+
 type Size = {
   width: number;
   height: number;
@@ -94,6 +100,7 @@ interface GameContext extends GameState {
   handleWindowClick: () => void;
   movePipes: () => void;
   startGame: (window: Size) => void;
+  saveScore: (score: number) => Promise<void>;
 }
 interface GameState {
   bird: {
@@ -128,6 +135,7 @@ interface GameState {
     score: number;
     datetime: string;
     key: string;
+    needsSaving?: boolean;
   }[];
   isStarted: boolean;
   isReady: boolean;
@@ -136,30 +144,104 @@ interface GameState {
     step: number;
     distance: number;
   };
+  highScore: number;
+  username: string;
+  isGameOver: boolean;
+  scoresFetched: boolean; // Add this to GameState interface
 }
 type StateDraft = WritableDraft<GameState>;
 const GameContext = React.createContext<GameContext | null>(null);
+
 export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, setState] = useImmer<GameState>(defaultState);
+  const { user, isSignedIn } = useUser();
+  
+  // Fetch user's high score on component mount
+  const fetchUserScore = useCallback(async () => {
+    if (!isSignedIn) return;
+    
+    try {
+      setState(draft => {
+        draft.scoresFetched = false; // Set fetching flag
+      });
+      
+      const response = await fetch('/api/user-score', {
+        credentials: 'include',
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch user score');
+      }
+      
+      const data = await response.json();
+      
+      setState(draft => {
+        if (data.success && data.score) {
+          draft.highScore = data.score.score;
+          draft.username = data.score.username || user?.username;
+        }
+        draft.scoresFetched = true; // Mark fetching as complete
+      });
+    } catch (error) {
+      console.error('Error fetching user score:', error);
+      setState(draft => {
+        draft.scoresFetched = true; // Mark as complete even on error
+      });
+    }
+  }, [isSignedIn, user, setState]);
+  
+  useEffect(() => {
+    if (isSignedIn && !state.scoresFetched) {
+      fetchUserScore();
+    }
+  }, [isSignedIn, fetchUserScore, state.scoresFetched]);
+  
+  // Save score to database
+  const saveScore = async (score: number) => {
+    if (!isSignedIn) return;
+  
+    try {
+      const username = user?.username || user?.firstName;
+  
+      if (score > state.highScore) {
+        setState(draft => {
+          draft.highScore = score;
+        });
+      }
+  
+      // Removed database saving logic
+      console.log(`Score (${score}) for ${username} not saved to the database (local update only).`);
+  
+    } catch (error) {
+      console.error('Error updating score locally:', error);
+      throw error;
+    }
+  };
+  
+  
   // Main Functions
   const startGame = (window: Size) => {
     setState((draft) => {
       draft.window = window;
       draft.isReady = true;
+      draft.isGameOver = false;
       setBirdCenter(draft);
       createPipes(draft);
       return draft;
     });
   };
+  
   const increaseScore = (draft: StateDraft) => {
     draft.rounds[draft.rounds.length - 1].score += 1;
   };
+  
   const multiplySpeed = (draft: StateDraft) => {
     const round = _.last(draft.rounds);
     if (round && round.score % draft.multiplier.step === 0) {
       draft.pipe.distance = draft.pipe.distance * draft.multiplier.distance;
     }
   };
+  
   // Pipe Functions
   const generatePipeExtension = (index: number, draft: StateDraft) => {
     const odd = _.random(0, 1) === 1;
@@ -170,6 +252,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
       y: draft.window.height - draft.pipe.height + extension,
     };
   };
+  
   const createPipes = (draft: StateDraft) => {
     const window = draft.window;
     draft.pipe.width = window.width / draft.pipes.length;
@@ -199,6 +282,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
       pipe.bottom.position = pipe.bottom.initial;
     });
   };
+  
   const movePipes = () => {
     setState((draft) => {
       draft.pipes.forEach((pipe, index) => {
@@ -221,6 +305,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
       return draft;
     });
   };
+  
   // Window Functions
   const handleWindowClick = () => {
     if (state.isStarted) {
@@ -228,6 +313,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
     } else {
       setState((draft) => {
         draft.isStarted = true;
+        draft.isGameOver = false;
         draft.rounds.push({
           score: 0,
           datetime: new Date().toISOString(),
@@ -240,6 +326,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
       });
     }
   };
+  
   // Bird Functions
   const setBirdCenter = (draft: StateDraft) => {
     draft.bird.position.x = draft.window.width / 2 - draft.bird.size.width / 2;
@@ -248,6 +335,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
     draft.bird.initial.x = draft.bird.position.x;
     draft.bird.initial.y = draft.bird.position.y;
   };
+  
   const getNextFrame = () =>
     setState((draft) => {
       var next = (draft.bird.frameIndex + 1) % FRAMES.length;
@@ -255,6 +343,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
       draft.bird.frameIndex = next;
       return draft;
     });
+    
   const checkImpact = (draft: StateDraft) => {
     const groundImpact =
       draft.bird.position.y + draft.bird.size.height >=
@@ -277,14 +366,44 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
         draft.bird.position.y + draft.bird.size.height - draft.pipe.tolerance;
       return birdTop < topPipe || birdBottom > bottomPipe;
     });
+    
     if (groundImpact || pipeImpact) {
       draft.bird.isFlying = false;
       draft.isStarted = false;
+      draft.isGameOver = true;
       draft.bird.animate.rotate = [0, 540];
+      
+      // Get current score to save
+      const currentRound = draft.rounds[draft.rounds.length - 1];
+      if (currentRound) {
+        const currentScore = currentRound.score;
+        
+        // We'll call saveScore outside of the setState function
+        // but store a flag to know we need to save this score
+        draft.rounds[draft.rounds.length - 1].needsSaving = true;
+      }
     } else {
       draft.bird.animate.rotate = [0, 0];
     }
   };
+
+  // Effect to save score when game ends
+  useEffect(() => {
+    const currentRound = _.last(state.rounds);
+    if (state.isGameOver && currentRound && currentRound.needsSaving) {
+      saveScore(currentRound.score).catch(err => {
+        console.error('Failed to save score in effect:', err);
+      });
+      
+      // Clear the flag
+      setState(draft => {
+        const lastRound = _.last(draft.rounds);
+        if (lastRound) {
+          lastRound.needsSaving = false;
+        }
+      });
+    }
+  }, [state.isGameOver, state.rounds]);
 
   const fly = () => {
     setState((draft) => {
@@ -303,6 +422,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
       return draft;
     });
   };
+  
   return (
     <GameContext.Provider
       value={{
@@ -313,6 +433,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
         handleWindowClick,
         movePipes,
         startGame,
+        saveScore,
       }}
     >
       {children}

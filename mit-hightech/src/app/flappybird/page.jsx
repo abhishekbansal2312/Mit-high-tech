@@ -34,7 +34,7 @@ function GameContent() {
       {/* Graphics positioned with proper z-index */}
       <div className="absolute inset-0 z-10 pointer-events-none">
         <Graphics />
-        <Graphics3 />
+    
       </div>
       
       <div className="container max-w-5xl mx-auto flex items-center justify-center flex-col md:flex-row gap-6 relative z-20">
