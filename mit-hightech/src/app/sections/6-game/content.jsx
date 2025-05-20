@@ -57,7 +57,7 @@ const FlappyBirdPromo = () => {
                 </div>
                 <div>
                   <h4 className="font-semibold text-sm sm:text-base text-white">Limited-Time Event</h4>
-                  <p className="text-white/70 text-xs sm:text-sm">Don't miss your chance to participate in this special competition</p>
+                  <p className="text-white/70 text-xs sm:text-sm">Dont miss your chance to participate in this special competition</p>
                 </div>
               </div>
             </div>
