@@ -15,6 +15,8 @@ import Conveners from "./sections/4-conveners/speakers";
 import Director from "./sections/4-director/speakers";
 import Maintainers from "./sections/6-mainteners/mainteners";
 
+import FlappyBird from "./sections/6-game/schedule";
+
 
 export default function Home() {
   useEffect(() => {
@@ -39,7 +41,7 @@ export default function Home() {
         <Speakers />
         <FAQ />
         <Maintainers/>
-      
+      <FlappyBird/>
         <Footer />
       </main>
       <Timer />

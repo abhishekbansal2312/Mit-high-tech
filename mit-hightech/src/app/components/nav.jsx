@@ -15,6 +15,7 @@ import logo from "../../../public/image.png";
 import Image from "next/image";
 import { IconX, IconMenuDeep, IconLogin, IconUserPlus, IconLogout } from "@tabler/icons-react";
 import { SignInButton, SignUpButton, useAuth, useClerk } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 gsap.registerPlugin(ScrollToPlugin);
 
@@ -23,13 +24,14 @@ const Nav = () => {
     "about",
     "events",
     "schedule",
-    "coordinator",
+    "flappybird",
     "developers"
   ];
   const [currSection, setCurrSection] = useState(null);
   const [indicatorStyle, setIndicatorStyle] = useState({});
   const [isClicked, setIsClicked] = useState(false);
   const { isSignedIn } = useAuth();
+  const router = useRouter();
 
   // Update the indicator style as currSection changes
   useEffect(() => {
@@ -211,13 +213,25 @@ const Nav = () => {
 };
 
 const NavItem = ({ name, setCurrSection }) => {
-  // Scroll to corresponding section on click
+  const router = useRouter();
+  const { isSignedIn } = useAuth();
+  
+  // Special handling for Flappy Bird section
   const handleClick = () => {
-    gsap.to(window, {
-      duration: 1,
-      scrollTo: `#${name}`,
-      ease: "power2.inOut",
-    });
+    if (name === "flappybird") {
+      if (isSignedIn) {
+        router.push("/flappybird");
+      } else {
+        router.push("/sign-in");
+      }
+    } else {
+      // Regular section navigation
+      gsap.to(window, {
+        duration: 1,
+        scrollTo: `#${name}`,
+        ease: "power2.inOut",
+      });
+    }
   };
 
   const ref = useRef(null);
@@ -225,7 +239,9 @@ const NavItem = ({ name, setCurrSection }) => {
   const isInView = useInView(sectionRef, { amount: "some" });
 
   useEffect(() => {
-    sectionRef.current = document.getElementById(name);
+    if (name !== "flappybird") {
+      sectionRef.current = document.getElementById(name);
+    }
   }, [name]);
 
   useEffect(() => {
@@ -233,6 +249,8 @@ const NavItem = ({ name, setCurrSection }) => {
       setCurrSection(ref);
     }
   }, [isInView, ref, setCurrSection]);
+
+  const displayName = name === "flappybird" ? "FLAPPY BIRD" : name.toUpperCase();
 
   return (
     <motion.li
@@ -245,7 +263,7 @@ const NavItem = ({ name, setCurrSection }) => {
       onClick={() => handleClick()}
       className="text-[12px] sm:text-[20px] max-md:!text-white font-bold md:font-semibold drop-shadow-md cursor-pointer leading-tight"
     >
-      {name.toUpperCase()}
+      {displayName}
     </motion.li>
   );
 };
