@@ -9,15 +9,25 @@ import _ from "lodash";
 import GameDetails from "../components/GameDetails";
 import Graphics from "../sections/0-landing/graphics";
 import Graphics2 from "../sections/4-director/graphics";
-import Graphics3 from "../sections/1-about/graphics";
 import useWindowSize from "../hooks/useWindowSize";
+import { useAuth } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 // Inner component that requires the Game context
 function GameContent() {
   const { handleWindowClick, startGame, isReady } = useGame();
-  const { height, width } = useWindowSize()
+  const { height } = useWindowSize();
+  const { isSignedIn, isLoaded } = useAuth();
+  const router = useRouter();
   const gameHeight = Math.min(Math.max(height * 0.6, 400), 600);
   const [ref, size] = useElementSize();
+
+  useEffect(() => {
+    // Redirect to sign-up if not authenticated
+    if (isLoaded && !isSignedIn) {
+      router.push("/sign-up");
+    }
+  }, [isLoaded, isSignedIn, router]);
 
   useEffect(() => {
     if (size.width > 0 && size.height > 0) {
@@ -25,6 +35,17 @@ function GameContent() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [size]); // Intentionally omitting startGame from dependencies
+  
+  // Show loading state or nothing while checking authentication
+  if (!isLoaded || !isSignedIn) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-purple-900 to-indigo-800">
+        <div className="p-6 bg-indigo-800 bg-opacity-90 rounded-lg shadow-lg text-white border border-indigo-700">
+          <h2 className="text-xl font-bold mb-2 text-center">Loading game...</h2>
+        </div>
+      </div>
+    );
+  }
   
   return (
     <div className="flex flex-col md:flex-row gap-4 p-4 w-full pb-20 min-h-screen relative overflow-hidden">
@@ -34,7 +55,6 @@ function GameContent() {
       {/* Graphics positioned with proper z-index */}
       <div className="absolute inset-0 z-10 pointer-events-none">
         <Graphics />
-    
       </div>
       
       <div className="container max-w-5xl mx-auto flex items-center justify-center flex-col md:flex-row gap-6 relative z-20">
