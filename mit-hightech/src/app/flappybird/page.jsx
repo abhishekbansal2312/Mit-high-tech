@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import FlappyBird from "../components/FlappyBird";
 import useGame, { GameProvider } from "../hooks/useGame";
@@ -21,6 +21,7 @@ function GameContent() {
   const router = useRouter();
   const gameHeight = Math.min(Math.max(height * 0.6, 400), 600);
   const [ref, size] = useElementSize();
+  const [showRefreshTip, setShowRefreshTip] = useState(true);
 
   useEffect(() => {
     // Redirect to sign-up if not authenticated
@@ -36,6 +37,15 @@ function GameContent() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [size]); // Intentionally omitting startGame from dependencies
   
+  // Auto-hide refresh tip after 10 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowRefreshTip(false);
+    }, 10000);
+    
+    return () => clearTimeout(timer);
+  }, []);
+
   // Show loading state or nothing while checking authentication
   if (!isLoaded || !isSignedIn) {
     return (
@@ -66,6 +76,25 @@ function GameContent() {
             <p className="mt-2 text-purple-100">Avoid the pipes and don&apos;t hit the ground!</p>
             <p className="mt-2 text-purple-100">Every pipe you pass increases your score.</p>
             <p className="mt-2 text-purple-100">The game gets faster as your score increases.</p>
+            
+            {/* Refresh tip message */}
+            {showRefreshTip && (
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="mt-4 p-2 bg-indigo-700 rounded-md border border-indigo-500"
+              >
+                <p className="text-purple-100 font-medium">
+                  Note: If the bird or game elements aren&apos;t visible, please try refreshing the page.
+                </p>
+                <button 
+                  onClick={() => setShowRefreshTip(false)}
+                  className="text-xs text-purple-300 mt-1 underline"
+                >
+                  Dismiss
+                </button>
+              </motion.div>
+            )}
           </div>
           <div className="mb-4 mt-4 w-full">
             <GameDetails />
