@@ -39,7 +39,7 @@ export async function GET(request) {
         message: 'No score found for this user' 
       });
     }
-    console.log(userScore);
+
     
     
     return NextResponse.json({ 
