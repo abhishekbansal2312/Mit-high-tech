@@ -69,7 +69,7 @@ const defaultState = {
     step: 5,
   },
   highScore: 0,
-  username: 'Anonymous Player',
+  username: '',
   isGameOver: false,
   scoresFetched: false // Add a flag to track if scores have been fetched
 };
@@ -178,7 +178,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
       setState(draft => {
         if (data.success && data.score) {
           draft.highScore = data.score.score;
-          draft.username = data.score.username || user?.username || 'Anonymous Player';
+          draft.username = data.score.username || user?.username;
         }
         draft.scoresFetched = true; // Mark fetching as complete
       });
@@ -201,7 +201,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
     if (!isSignedIn) return;
     
     try {
-      const username = user?.username || user?.firstName || 'Anonymous Player';
+      const username = user?.username || user?.firstName;
       
       const response = await fetch('/api/leaderboard', {
         method: 'POST',

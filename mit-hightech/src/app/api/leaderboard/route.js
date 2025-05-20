@@ -81,7 +81,7 @@ export async function POST(request) {
         // Create new score record if not found
         const newScore = new Score({
           userId,
-          username: data.username || 'Anonymous Player',
+          username: data.username,
           score: data.score,
         });
         console.log(newScore, "wdew");

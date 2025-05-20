@@ -53,7 +53,7 @@ const GameDetails = () => {
         },
         body: JSON.stringify({
           score: currentScore,
-          username: user?.username || user?.firstName || 'Anonymous Player'
+          username: user?.username || user?.firstName
         }),
         credentials: 'include',
       });

@@ -8,7 +8,6 @@ const Score = mongoose.models.Score || mongoose.model('Score', new mongoose.Sche
   },
   username: {
     type: String,
-    default: 'Anonymous Player'
   },
   score: {
     type: Number,

@@ -63,7 +63,7 @@ export async function POST(request) {
     // Create new score record
     const newScore = new Score({
       userId,
-      username: data.username || 'Anonymous Player',
+      username: data.username,
       score: data.score
     });
     
