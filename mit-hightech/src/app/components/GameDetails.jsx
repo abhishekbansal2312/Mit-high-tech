@@ -53,7 +53,9 @@ const GameDetails = () => {
         },
         body: JSON.stringify({
           score: currentScore,
-          username: user?.username || user?.firstName
+          username: user?.firstName && user?.lastName
+            ? `${user.firstName} ${user.lastName}`
+            : user?.username 
         }),
         credentials: 'include',
       });

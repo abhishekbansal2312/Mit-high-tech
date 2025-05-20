@@ -44,7 +44,6 @@ export async function POST(request) {
     try {
       const { userId } = await auth();
   
-      console.log(userId, "iusn");
       
       if (!userId) {
         return NextResponse.json(
@@ -77,8 +76,11 @@ export async function POST(request) {
           message: 'Score updated successfully',
           score: existingScore,
         });
+  
+        
       } else {
         // Create new score record if not found
+
         const newScore = new Score({
           userId,
           username: data.username,
