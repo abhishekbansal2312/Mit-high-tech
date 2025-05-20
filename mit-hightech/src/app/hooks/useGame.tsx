@@ -199,43 +199,25 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   // Save score to database
   const saveScore = async (score: number) => {
     if (!isSignedIn) return;
-    
+  
     try {
       const username = user?.username || user?.firstName;
-      
-      const response = await fetch('/api/leaderboard', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          score,
-          username
-        }),
-        credentials: 'include'
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to save score');
+  
+      if (score > state.highScore) {
+        setState(draft => {
+          draft.highScore = score;
+        });
       }
-      
-      const data = await response.json();
-      
-      if (data.success) {
-        console.log('Score saved successfully');
-        
-        // Update local high score if the new score is higher
-        if (score > state.highScore) {
-          setState(draft => {
-            draft.highScore = score;
-          });
-        }
-      }
+  
+      // Removed database saving logic
+      console.log(`Score (${score}) for ${username} not saved to the database (local update only).`);
+  
     } catch (error) {
-      console.error('Error saving score:', error);
-      throw error; // Re-throw the error so the caller can handle it
+      console.error('Error updating score locally:', error);
+      throw error;
     }
   };
+  
   
   // Main Functions
   const startGame = (window: Size) => {
