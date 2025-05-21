@@ -71,7 +71,8 @@ const defaultState = {
   highScore: 0,
   username: '',
   isGameOver: false,
-  scoresFetched: false // Add a flag to track if scores have been fetched
+  scoresFetched: false, // Add a flag to track if scores have been fetched
+  pendingFly: false // NEW: Add a flag to track pending fly actions
 };
 
 type Size = {
@@ -147,7 +148,8 @@ interface GameState {
   highScore: number;
   username: string;
   isGameOver: boolean;
-  scoresFetched: boolean; // Add this to GameState interface
+  scoresFetched: boolean; 
+  pendingFly: boolean; // NEW: Add to GameState interface
 }
 type StateDraft = WritableDraft<GameState>;
 const GameContext = React.createContext<GameContext | null>(null);
@@ -156,10 +158,13 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, setState] = useImmer<GameState>(defaultState);
   const { user, isSignedIn } = useUser();
   
-  // Add debounce/throttling mechanisms
+  // Improved debounce/throttling mechanisms
   const lastClickTime = useRef<number>(0);
-  const isProcessingClick = useRef<boolean>(false);
-  const CLICK_DEBOUNCE_MS = 100; // Minimum time between clicks (35ms threshold)
+  const clickInProgressRef = useRef<boolean>(false);
+  const CLICK_DEBOUNCE_MS = 150; // Increased from 100ms to 150ms for better debouncing
+  
+  // Improved throttling with animation frame for smoother experience
+  const throttledFly = useRef<() => void>();
   
   // Fetch user's high score on component mount
   const fetchUserScore = useCallback(async () => {
@@ -230,6 +235,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
       draft.window = window;
       draft.isReady = true;
       draft.isGameOver = false;
+      draft.pendingFly = false; // Reset pendingFly flag
       setBirdCenter(draft);
       createPipes(draft);
       return draft;
@@ -244,7 +250,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
     const round = _.last(draft.rounds);
     if (round && round.score % draft.multiplier.step === 0) {
       // Only increase speed if the score is below 35
-      if (round.score < 35) {
+      if (round.score < 27) {
         draft.pipe.distance = draft.pipe.distance * draft.multiplier.distance;
       }
     }
@@ -316,42 +322,50 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   
   // Window Functions
   const handleWindowClick = () => {
-    // Implement click debouncing to prevent double-click issues
     const now = Date.now();
     
-    // Return early if we're still processing a previous click
-    // or if the time since the last click is too short
-    if (isProcessingClick.current || (now - lastClickTime.current < CLICK_DEBOUNCE_MS)) {
+    // Ignore clicks that happen too soon after the previous click
+    if (now - lastClickTime.current < CLICK_DEBOUNCE_MS) {
       return;
     }
     
-    // Set processing flag to prevent concurrent execution
-    isProcessingClick.current = true;
+    // Update last click time
     lastClickTime.current = now;
     
-    try {
-      if (state.isStarted) {
-        fly();
-      } else {
-        setState((draft) => {
-          draft.isStarted = true;
-          draft.isGameOver = false;
-          draft.rounds.push({
-            score: 0,
-            datetime: new Date().toISOString(),
-            key: v4(),
-          });
-          draft.bird.isFlying = true;
-          setBirdCenter(draft);
-          createPipes(draft);
-          return draft;
+    // If game is not started, start it
+    if (!state.isStarted) {
+      setState((draft) => {
+        draft.isStarted = true;
+        draft.isGameOver = false;
+        draft.rounds.push({
+          score: 0,
+          datetime: new Date().toISOString(),
+          key: v4(),
+        });
+        draft.bird.isFlying = true;
+        draft.pendingFly = false; // Reset pendingFly flag
+        setBirdCenter(draft);
+        createPipes(draft);
+        return draft;
+      });
+      return;
+    }
+    
+    // Only fly if the game is started and not game over
+    if (state.isStarted && !state.isGameOver && state.bird.isFlying) {
+      // Use requestAnimationFrame to synchronize with the rendering cycle
+      if (!clickInProgressRef.current) {
+        clickInProgressRef.current = true;
+        
+        requestAnimationFrame(() => {
+          fly();
+          
+          // Release the click lock after a delay
+          setTimeout(() => {
+            clickInProgressRef.current = false;
+          }, CLICK_DEBOUNCE_MS / 2);
         });
       }
-    } finally {
-      // Reset processing flag after a short delay to ensure state updates have completed
-      setTimeout(() => {
-        isProcessingClick.current = false;
-      }, 100); // Use the same 35ms threshold
     }
   };
   
@@ -399,6 +413,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
       draft.bird.isFlying = false;
       draft.isStarted = false;
       draft.isGameOver = true;
+      draft.pendingFly = false; // Reset pendingFly on game over
       draft.bird.animate.rotate = [0, 540];
       
       // Get current score to save
@@ -433,11 +448,25 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [state.isGameOver, state.rounds]);
 
+  // Improved fly function with state handling
   const fly = () => {
     setState((draft) => {
       if (draft.isStarted && draft.bird.isFlying) {
-        draft.bird.position.y -= draft.bird.fly.distance;
-        checkImpact(draft);
+        // Only fly if we're not already handling a fly action
+        if (!draft.pendingFly) {
+          draft.pendingFly = true;
+          draft.bird.position.y -= draft.bird.fly.distance;
+          checkImpact(draft);
+          
+          // Schedule resetting pendingFly flag after a short delay
+          // This happens outside the setState to avoid nested setState issues
+          setTimeout(() => {
+            setState(innerDraft => {
+              innerDraft.pendingFly = false;
+              return innerDraft;
+            });
+          }, CLICK_DEBOUNCE_MS / 2);
+        }
       }
       return draft;
     });
