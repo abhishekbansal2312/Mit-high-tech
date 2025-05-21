@@ -43,7 +43,7 @@ const Content = () => {
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, delay: 3, ease: "easeOut" }}
-        className="mt-5 text-[22px] md:text-[3vw] font-bold text-white drop-shadow-title"
+        className="mt-2 text-[22px] md:text-[3vw] font-bold text-white drop-shadow-title"
       >
         MAY 23, 2025
       </motion.h2>
@@ -53,7 +53,7 @@ const Content = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, delay: 4, ease: "easeOut" }}
-        className="mt-8 flex flex-col sm:flex-row gap-4"
+        className="mt-4 flex flex-col sm:flex-row gap-4"
       >
         {/* REGISTER BUTTON */}
         <Link
@@ -71,9 +71,9 @@ const Content = () => {
               scale: isHovered ? 1.05 : 1
             }}
             transition={{ duration: 0.3 }}
-            className="relative flex items-center justify-center font-bold text-brand-primary z-10 px-6 py-3 sm:px-4 sm:py-2 backdrop-blur-md rounded-md sm:rounded-lg border-2 border-white/20 shadow-lg hover:shadow-xl"
+            className="relative flex items-center justify-center font-bold text-brand-primary z-10 px-2 py-3 sm:px-4 sm:py-2 backdrop-blur-md rounded-md sm:rounded-lg border-2 border-white/20 shadow-lg hover:shadow-xl"
           >
-            <span className="text-lg sm:text-2xl tracking-wider">REGISTER NOW</span>
+            <span className="text-md sm:text-xl tracking-wider">REGISTER NOW</span>
           </motion.div>
         </Link>
 
@@ -95,7 +95,7 @@ const Content = () => {
             transition={{ duration: 0.3 }}
             className="relative flex items-center justify-center font-bold text-brand-primary z-10 px-6 py-3 sm:px-4 sm:py-2 backdrop-blur-md rounded-md sm:rounded-lg border-2 border-white/20 shadow-lg hover:shadow-xl"
           >
-            <span className="text-lg sm:text-2xl tracking-wider">DOWNLOAD RULEBOOK</span>
+            <span className="text-md sm:text-xl tracking-wider">DOWNLOAD RULEBOOK</span>
           </motion.div>
         </Link>
       </motion.div>
