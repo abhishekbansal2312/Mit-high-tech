@@ -8,9 +8,6 @@ import { useRouter } from 'next/navigation';
 
 export default function LeaderboardPage() {
   const { isSignedIn, isLoaded } = useAuth();
-
-
-
   // Determine back link based on authentication status
   const backLink = isSignedIn ? '/' : '/';
   const backText = isSignedIn ? 'Back to Home' : 'Back to Home';
