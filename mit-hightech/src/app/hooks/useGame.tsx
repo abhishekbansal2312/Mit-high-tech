@@ -9,6 +9,7 @@ import { useUser } from "@clerk/nextjs";
 const HEIGHT = 64;
 const WIDTH = 92;
 const FRAMES = ["0px", "92px", "184px", "0px"];
+const SPEED_THRESHOLD = 80; // New constant for max score before stopping speed increases
 const defaultState = {
   bird: {
     position: { x: 0, y: 0 },
@@ -71,7 +72,7 @@ const defaultState = {
   highScore: 0,
   username: '',
   isGameOver: false,
-  scoresFetched: false // Add a flag to track if scores have been fetched
+  scoresFetched: false
 };
 
 type Size = {
@@ -147,7 +148,7 @@ interface GameState {
   highScore: number;
   username: string;
   isGameOver: boolean;
-  scoresFetched: boolean; // Add this to GameState interface
+  scoresFetched: boolean;
 }
 type StateDraft = WritableDraft<GameState>;
 const GameContext = React.createContext<GameContext | null>(null);
@@ -221,6 +222,11 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   
   // Main Functions
   const startGame = (window: Size) => {
+    if (!window || !window.width || !window.height) {
+      console.error('Invalid window size');
+      return;
+    }
+    
     setState((draft) => {
       draft.window = window;
       draft.isReady = true;
@@ -235,9 +241,11 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
     draft.rounds[draft.rounds.length - 1].score += 1;
   };
   
+  // Modified multiplySpeed function to stop increasing speed after reaching the threshold
   const multiplySpeed = (draft: StateDraft) => {
     const round = _.last(draft.rounds);
-    if (round && round.score % draft.multiplier.step === 0) {
+    // Only increase speed if score is below the threshold
+    if (round && round.score % draft.multiplier.step === 0 && round.score < SPEED_THRESHOLD) {
       draft.pipe.distance = draft.pipe.distance * draft.multiplier.distance;
     }
   };
