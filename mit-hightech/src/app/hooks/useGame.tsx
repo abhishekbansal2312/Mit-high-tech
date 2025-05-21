@@ -1,5 +1,5 @@
 import _ from "lodash";
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, useRef } from "react";  // Added useRef
 import { useImmer } from "use-immer";
 import { TargetAndTransition } from "framer-motion";
 import { WritableDraft } from "immer";
@@ -156,6 +156,11 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, setState] = useImmer<GameState>(defaultState);
   const { user, isSignedIn } = useUser();
   
+  // Add debounce/throttling mechanisms
+  const lastClickTime = useRef<number>(0);
+  const isProcessingClick = useRef<boolean>(false);
+  const CLICK_DEBOUNCE_MS = 200; // Minimum time between clicks
+  
   // Fetch user's high score on component mount
   const fetchUserScore = useCallback(async () => {
     if (!isSignedIn) return;
@@ -308,22 +313,42 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   
   // Window Functions
   const handleWindowClick = () => {
-    if (state.isStarted) {
-      fly();
-    } else {
-      setState((draft) => {
-        draft.isStarted = true;
-        draft.isGameOver = false;
-        draft.rounds.push({
-          score: 0,
-          datetime: new Date().toISOString(),
-          key: v4(),
+    // Implement click debouncing to prevent double-click issues
+    const now = Date.now();
+    
+    // Return early if we're still processing a previous click
+    // or if the time since the last click is too short
+    if (isProcessingClick.current || (now - lastClickTime.current < CLICK_DEBOUNCE_MS)) {
+      return;
+    }
+    
+    // Set processing flag to prevent concurrent execution
+    isProcessingClick.current = true;
+    lastClickTime.current = now;
+    
+    try {
+      if (state.isStarted) {
+        fly();
+      } else {
+        setState((draft) => {
+          draft.isStarted = true;
+          draft.isGameOver = false;
+          draft.rounds.push({
+            score: 0,
+            datetime: new Date().toISOString(),
+            key: v4(),
+          });
+          draft.bird.isFlying = true;
+          setBirdCenter(draft);
+          createPipes(draft);
+          return draft;
         });
-        draft.bird.isFlying = true;
-        setBirdCenter(draft);
-        createPipes(draft);
-        return draft;
-      });
+      }
+    } finally {
+      // Reset processing flag after a short delay to ensure state updates have completed
+      setTimeout(() => {
+        isProcessingClick.current = false;
+      }, CLICK_DEBOUNCE_MS);
     }
   };
   
@@ -407,18 +432,20 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
 
   const fly = () => {
     setState((draft) => {
-      draft.bird.isFlying = true;
-      draft.bird.position.y -= draft.bird.fly.distance;
-      checkImpact(draft);
+      if (draft.isStarted && draft.bird.isFlying) {
+        draft.bird.position.y -= draft.bird.fly.distance;
+        checkImpact(draft);
+      }
       return draft;
     });
   };
 
   const fall = () => {
     setState((draft) => {
-      draft.bird.isFlying = true;
-      draft.bird.position.y += draft.bird.fall.distance;
-      checkImpact(draft);
+      if (draft.bird.isFlying) {
+        draft.bird.position.y += draft.bird.fall.distance;
+        checkImpact(draft);
+      }
       return draft;
     });
   };
