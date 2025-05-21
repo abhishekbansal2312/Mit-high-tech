@@ -159,7 +159,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   // Add debounce/throttling mechanisms
   const lastClickTime = useRef<number>(0);
   const isProcessingClick = useRef<boolean>(false);
-  const CLICK_DEBOUNCE_MS = 200; // Minimum time between clicks
+  const CLICK_DEBOUNCE_MS = 120; // Minimum time between clicks
   
   // Fetch user's high score on component mount
   const fetchUserScore = useCallback(async () => {
