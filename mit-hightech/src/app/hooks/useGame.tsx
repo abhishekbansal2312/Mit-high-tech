@@ -9,7 +9,7 @@ import { useUser } from "@clerk/nextjs";
 const HEIGHT = 64;
 const WIDTH = 92;
 const FRAMES = ["0px", "92px", "184px", "0px"];
-const SPEED_THRESHOLD = 80; // New constant for max score before stopping speed increases
+const SPEED_THRESHOLD = 40; // New constant for max score before stopping speed increases
 const defaultState = {
   bird: {
     position: { x: 0, y: 0 },
