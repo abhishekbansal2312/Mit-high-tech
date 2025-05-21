@@ -225,11 +225,9 @@ const NavItem = ({ name, setCurrSection }) => {
         router.push("/sign-in");
       }
     } else if (name === "leaderboard") {
-      if (isSignedIn) {
+      
         router.push("/flappybird/leaderboard");
-      } else {
-        router.push("/sign-in");
-      }
+     
     } else {
       // Regular section navigation
       gsap.to(window, {
