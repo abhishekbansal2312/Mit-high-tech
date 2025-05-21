@@ -1,5 +1,5 @@
 import _ from "lodash";
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, useRef } from "react";  // Added useRef
 import { useImmer } from "use-immer";
 import { TargetAndTransition } from "framer-motion";
 import { WritableDraft } from "immer";
@@ -9,7 +9,6 @@ import { useUser } from "@clerk/nextjs";
 const HEIGHT = 64;
 const WIDTH = 92;
 const FRAMES = ["0px", "92px", "184px", "0px"];
-const SPEED_THRESHOLD = 40; // New constant for max score before stopping speed increases
 const defaultState = {
   bird: {
     position: { x: 0, y: 0 },
@@ -72,7 +71,7 @@ const defaultState = {
   highScore: 0,
   username: '',
   isGameOver: false,
-  scoresFetched: false
+  scoresFetched: false // Add a flag to track if scores have been fetched
 };
 
 type Size = {
@@ -148,7 +147,7 @@ interface GameState {
   highScore: number;
   username: string;
   isGameOver: boolean;
-  scoresFetched: boolean;
+  scoresFetched: boolean; // Add this to GameState interface
 }
 type StateDraft = WritableDraft<GameState>;
 const GameContext = React.createContext<GameContext | null>(null);
@@ -156,6 +155,11 @@ const GameContext = React.createContext<GameContext | null>(null);
 export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, setState] = useImmer<GameState>(defaultState);
   const { user, isSignedIn } = useUser();
+  
+  // Add debounce/throttling mechanisms
+  const lastClickTime = useRef<number>(0);
+  const isProcessingClick = useRef<boolean>(false);
+  const CLICK_DEBOUNCE_MS = 100; // Minimum time between clicks (35ms threshold)
   
   // Fetch user's high score on component mount
   const fetchUserScore = useCallback(async () => {
@@ -222,11 +226,6 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   
   // Main Functions
   const startGame = (window: Size) => {
-    if (!window || !window.width || !window.height) {
-      console.error('Invalid window size');
-      return;
-    }
-    
     setState((draft) => {
       draft.window = window;
       draft.isReady = true;
@@ -241,12 +240,13 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
     draft.rounds[draft.rounds.length - 1].score += 1;
   };
   
-  // Modified multiplySpeed function to stop increasing speed after reaching the threshold
   const multiplySpeed = (draft: StateDraft) => {
     const round = _.last(draft.rounds);
-    // Only increase speed if score is below the threshold
-    if (round && round.score % draft.multiplier.step === 0 && round.score < SPEED_THRESHOLD) {
-      draft.pipe.distance = draft.pipe.distance * draft.multiplier.distance;
+    if (round && round.score % draft.multiplier.step === 0) {
+      // Only increase speed if the score is below 35
+      if (round.score < 35) {
+        draft.pipe.distance = draft.pipe.distance * draft.multiplier.distance;
+      }
     }
   };
   
@@ -316,22 +316,42 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   
   // Window Functions
   const handleWindowClick = () => {
-    if (state.isStarted) {
-      fly();
-    } else {
-      setState((draft) => {
-        draft.isStarted = true;
-        draft.isGameOver = false;
-        draft.rounds.push({
-          score: 0,
-          datetime: new Date().toISOString(),
-          key: v4(),
+    // Implement click debouncing to prevent double-click issues
+    const now = Date.now();
+    
+    // Return early if we're still processing a previous click
+    // or if the time since the last click is too short
+    if (isProcessingClick.current || (now - lastClickTime.current < CLICK_DEBOUNCE_MS)) {
+      return;
+    }
+    
+    // Set processing flag to prevent concurrent execution
+    isProcessingClick.current = true;
+    lastClickTime.current = now;
+    
+    try {
+      if (state.isStarted) {
+        fly();
+      } else {
+        setState((draft) => {
+          draft.isStarted = true;
+          draft.isGameOver = false;
+          draft.rounds.push({
+            score: 0,
+            datetime: new Date().toISOString(),
+            key: v4(),
+          });
+          draft.bird.isFlying = true;
+          setBirdCenter(draft);
+          createPipes(draft);
+          return draft;
         });
-        draft.bird.isFlying = true;
-        setBirdCenter(draft);
-        createPipes(draft);
-        return draft;
-      });
+      }
+    } finally {
+      // Reset processing flag after a short delay to ensure state updates have completed
+      setTimeout(() => {
+        isProcessingClick.current = false;
+      }, 100); // Use the same 35ms threshold
     }
   };
   
@@ -415,18 +435,20 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
 
   const fly = () => {
     setState((draft) => {
-      draft.bird.isFlying = true;
-      draft.bird.position.y -= draft.bird.fly.distance;
-      checkImpact(draft);
+      if (draft.isStarted && draft.bird.isFlying) {
+        draft.bird.position.y -= draft.bird.fly.distance;
+        checkImpact(draft);
+      }
       return draft;
     });
   };
 
   const fall = () => {
     setState((draft) => {
-      draft.bird.isFlying = true;
-      draft.bird.position.y += draft.bird.fall.distance;
-      checkImpact(draft);
+      if (draft.bird.isFlying) {
+        draft.bird.position.y += draft.bird.fall.distance;
+        checkImpact(draft);
+      }
       return draft;
     });
   };
