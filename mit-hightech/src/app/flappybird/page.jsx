@@ -12,6 +12,7 @@ import Graphics2 from "../sections/4-director/graphics";
 import useWindowSize from "../hooks/useWindowSize";
 import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 // Inner component that requires the Game context
 function GameContent() {
@@ -65,6 +66,20 @@ function GameContent() {
       {/* Graphics positioned with proper z-index */}
       <div className="absolute inset-0 z-10 pointer-events-none">
         <Graphics />
+      </div>
+      
+      {/* Back to Home button */}
+      <div className="z-50 max-w-48">
+        <Link href="/">
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="text-white bg-indigo-700 hover:bg-indigo-600 px-4 py-2 rounded-lg shadow-md flex items-center gap-2 transition-colors duration-300 border border-indigo-500"
+          >
+            <span>⬅</span>
+            <span>Back to Home</span>
+          </motion.div>
+        </Link>
       </div>
       
       <div className="container max-w-5xl mx-auto flex items-center justify-center flex-col md:flex-row gap-6 relative z-20">
