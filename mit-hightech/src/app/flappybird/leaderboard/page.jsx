@@ -12,8 +12,8 @@ export default function LeaderboardPage() {
 
 
   // Determine back link based on authentication status
-  const backLink = isSignedIn ? '/flappybird' : '/';
-  const backText = isSignedIn ? 'Back to Game' : 'Back to Home';
+  const backLink = isSignedIn ? '/' : '/';
+  const backText = isSignedIn ? 'Back to Home' : 'Back to Home';
 
   return (
     <div className="relative min-h-screen text-white p-6 overflow-hidden flex flex-col items-center justify-start">

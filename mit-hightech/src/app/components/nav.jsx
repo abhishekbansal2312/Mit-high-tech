@@ -25,7 +25,7 @@ const Nav = () => {
     "events",
     "schedule",
     "flappybird",
-    "developers"
+    "leaderboard"
   ];
   const [currSection, setCurrSection] = useState(null);
   const [indicatorStyle, setIndicatorStyle] = useState({});
@@ -216,11 +216,17 @@ const NavItem = ({ name, setCurrSection }) => {
   const router = useRouter();
   const { isSignedIn } = useAuth();
   
-  // Special handling for Flappy Bird section
+  // Special handling for Flappy Bird and Leaderboard sections
   const handleClick = () => {
     if (name === "flappybird") {
       if (isSignedIn) {
         router.push("/flappybird");
+      } else {
+        router.push("/sign-in");
+      }
+    } else if (name === "leaderboard") {
+      if (isSignedIn) {
+        router.push("/flappybird/leaderboard");
       } else {
         router.push("/sign-in");
       }
@@ -239,7 +245,7 @@ const NavItem = ({ name, setCurrSection }) => {
   const isInView = useInView(sectionRef, { amount: "some" });
 
   useEffect(() => {
-    if (name !== "flappybird") {
+    if (name !== "flappybird" && name !== "leaderboard") {
       sectionRef.current = document.getElementById(name);
     }
   }, [name]);
@@ -250,7 +256,15 @@ const NavItem = ({ name, setCurrSection }) => {
     }
   }, [isInView, ref, setCurrSection]);
 
-  const displayName = name === "flappybird" ? "FLAPPY BIRD" : name.toUpperCase();
+  // Format display names
+  let displayName;
+  if (name === "flappybird") {
+    displayName = "FLAPPY BIRD";
+  } else if (name === "leaderboard") {
+    displayName = "LEADERBOARD";
+  } else {
+    displayName = name.toUpperCase();
+  }
 
   return (
     <motion.li
