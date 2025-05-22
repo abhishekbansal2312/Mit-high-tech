@@ -245,7 +245,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   };
   
   const increaseScore = (draft: StateDraft) => {
-    draft.rounds[draft.rounds.length - 1].score += 10;
+    draft.rounds[draft.rounds.length - 1].score += 1;
   };
   
   const multiplySpeed = (draft: StateDraft) => {

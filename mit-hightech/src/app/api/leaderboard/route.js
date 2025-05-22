@@ -26,7 +26,7 @@ export async function GET() {
     // Get top 10 scores
     const scores = await Score.find({})
       .sort({ score: -1 })
-      .limit(15)
+      .limit(30)
       .lean();
     
     return NextResponse.json({ success: true, scores });
