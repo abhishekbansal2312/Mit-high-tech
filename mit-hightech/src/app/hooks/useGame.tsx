@@ -53,9 +53,10 @@ const defaultState = {
     width: 0,
     height: 0,
     extension: 0,
-    tolerance: 25,
+    tolerance: 20, // Increased tolerance for more forgiving collision
     distance: 10,
     delay: 75,
+    gap: 200, // Increased gap even more
   },
   rounds: [],
   isStarted: false,
@@ -131,6 +132,7 @@ interface GameState {
     delay: number;
     distance: number;
     tolerance: number;
+    gap: number; // Add gap to interface
   };
   rounds: {
     score: number;
@@ -209,19 +211,19 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   // Save score to database
   const saveScore = async (score: number) => {
     if (!isSignedIn) return;
-  
+
     try {
       const username = user?.username || user?.firstName;
-  
+
       if (score > state.highScore) {
         setState(draft => {
           draft.highScore = score;
         });
       }
-  
+
       // Removed database saving logic
       console.log(`Score (${score}) for ${username} not saved to the database (local update only).`);
-  
+
     } catch (error) {
       console.error('Error updating score locally:', error);
       throw error;
@@ -243,7 +245,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   };
   
   const increaseScore = (draft: StateDraft) => {
-    draft.rounds[draft.rounds.length - 1].score += 1;
+    draft.rounds[draft.rounds.length - 1].score += 10;
   };
   
   const multiplySpeed = (draft: StateDraft) => {
@@ -256,62 +258,94 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
   
-  // Pipe Functions
-  const generatePipeExtension = (index: number, draft: StateDraft) => {
-    const odd = _.random(0, 1) === 1;
-    const randomNumber = _.random(odd ? 0.5 : 0, odd ? 1 : 0, true);
-    const extension = randomNumber * draft.pipe.extension;
+  // Pipe Functions - FIXED VERSION
+  const generatePipeHeight = (draft: StateDraft) => {
+    // Generate a random height for the top pipe with more reasonable bounds
+    const minHeight = 80; // Increased minimum height
+    const maxHeight = draft.window.height - draft.pipe.gap - 80; // More space
+    const topPipeHeight = _.random(minHeight, maxHeight);
+    
     return {
-      height: draft.pipe.height + extension,
-      y: draft.window.height - draft.pipe.height + extension,
+      topHeight: topPipeHeight,
+      bottomY: topPipeHeight + draft.pipe.gap,
+      bottomHeight: draft.window.height - (topPipeHeight + draft.pipe.gap)
     };
   };
   
   const createPipes = (draft: StateDraft) => {
     const window = draft.window;
-    draft.pipe.width = window.width / draft.pipes.length;
-    draft.pipe.height = (2/7) * window.height;
+    draft.pipe.width = window.width / 6; // Make pipes a bit narrower
+    draft.pipe.gap = 220; // Increased gap between pipes
     draft.pipe.distance = defaultState.pipe.distance;
-    draft.pipe.extension = (0.5 / 3) * window.height;
+    
     draft.pipes.forEach((pipe, index) => {
-      const { height, y } = generatePipeExtension(index, draft);
-      var x = (index * 2 + 1) * draft.pipe.width + window.width;
+      const { topHeight, bottomY, bottomHeight } = generatePipeHeight(draft);
+      const x = (index + 1) * (window.width / 2) + window.width; // Better spacing
+      
+      // Top pipe
       pipe.top.initial = {
         x,
         y: 0,
       };
       pipe.top.size = {
-        height,
+        height: topHeight,
         width: draft.pipe.width,
       };
+      pipe.top.position = { ...pipe.top.initial };
+      
+      // Bottom pipe
       pipe.bottom.initial = {
         x,
-        y,
+        y: bottomY,
       };
       pipe.bottom.size = {
-        height,
+        height: bottomHeight,
         width: draft.pipe.width,
       };
-      pipe.top.position = pipe.top.initial;
-      pipe.bottom.position = pipe.bottom.initial;
+      pipe.bottom.position = { ...pipe.bottom.initial };
     });
   };
   
+  // FIXED movePipes function
   const movePipes = () => {
     setState((draft) => {
       draft.pipes.forEach((pipe, index) => {
-        if (pipe.top.position.x + pipe.top.size.width * 2 <= 0) {
-          const { height, y } = generatePipeExtension(index, draft);
-          pipe.top.position.x = draft.pipe.width * 2 + draft.window.width;
-          pipe.bottom.position.x = draft.pipe.width * 2 + draft.window.width;
-          pipe.top.size.height = height;
-          pipe.bottom.size.height = height;
-          pipe.bottom.position.y = y;
+        // Check if pipe has completely moved off screen
+        if (pipe.top.position.x + pipe.top.size.width < 0) {
+          // Find the rightmost pipe to position this one after it
+          let maxX = 0;
+          draft.pipes.forEach(otherPipe => {
+            if (otherPipe !== pipe) {
+              maxX = Math.max(maxX, otherPipe.top.position.x);
+            }
+          });
+          
+          // Generate new pipe heights
+          const { topHeight, bottomY, bottomHeight } = generatePipeHeight(draft);
+          
+          // Position the pipe after the rightmost pipe
+          const newX = maxX + (draft.window.width / 2);
+          
+          // Update top pipe
+          pipe.top.position.x = newX;
+          pipe.top.position.y = 0;
+          pipe.top.size.height = topHeight;
+          pipe.top.size.width = draft.pipe.width;
           pipe.top.key = v4();
+          
+          // Update bottom pipe
+          pipe.bottom.position.x = newX;
+          pipe.bottom.position.y = bottomY;
+          pipe.bottom.size.height = bottomHeight;
+          pipe.bottom.size.width = draft.pipe.width;
           pipe.bottom.key = v4();
+          
+          // Increase score and speed
           increaseScore(draft);
           multiplySpeed(draft);
         }
+        
+        // Move pipes to the left
         pipe.top.position.x -= draft.pipe.distance;
         pipe.bottom.position.x -= draft.pipe.distance;
       });
@@ -386,30 +420,52 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
       return draft;
     });
     
+  // COMPLETELY FIXED collision detection
   const checkImpact = (draft: StateDraft) => {
-    const groundImpact =
-      draft.bird.position.y + draft.bird.size.height >=
-      draft.window.height + draft.pipe.tolerance;
+    // Check ground collision - bird bottom touches ground
+    const groundImpact = draft.bird.position.y + draft.bird.size.height >= draft.window.height;
+    
+    // Check ceiling collision - bird top touches ceiling
+    const ceilingImpact = draft.bird.position.y <= 0;
+    
+    // Find pipes that overlap horizontally with the bird
     const impactablePipes = draft.pipes.filter((pipe) => {
-      return (
-        pipe.top.position.x <
-          draft.bird.position.x -
-            draft.pipe.tolerance +
-            draft.bird.size.width &&
-        pipe.top.position.x + pipe.top.size.width >
-          draft.bird.position.x + draft.pipe.tolerance
-      );
-    });
-    const pipeImpact = impactablePipes.some((pipe) => {
-      const topPipe = pipe.top.position.y + pipe.top.size.height;
-      const bottomPipe = pipe.bottom.position.y;
-      const birdTop = draft.bird.position.y + draft.pipe.tolerance;
-      const birdBottom =
-        draft.bird.position.y + draft.bird.size.height - draft.pipe.tolerance;
-      return birdTop < topPipe || birdBottom > bottomPipe;
+      const pipeLeft = pipe.top.position.x;
+      const pipeRight = pipe.top.position.x + pipe.top.size.width;
+      const birdLeft = draft.bird.position.x;
+      const birdRight = draft.bird.position.x + draft.bird.size.width;
+      
+      // Only check pipes that actually overlap horizontally with the bird
+      return birdRight > pipeLeft && birdLeft < pipeRight;
     });
     
-    if (groundImpact || pipeImpact) {
+    // Check pipe collision ONLY for pipes that overlap horizontally
+    const pipeImpact = impactablePipes.some((pipe) => {
+      // Apply tolerance to make the bird's collision box smaller
+      const birdTop = draft.bird.position.y + draft.pipe.tolerance;
+      const birdBottom = draft.bird.position.y + draft.bird.size.height - draft.pipe.tolerance;
+      const birdLeft = draft.bird.position.x + draft.pipe.tolerance;
+      const birdRight = draft.bird.position.x + draft.bird.size.width - draft.pipe.tolerance;
+      
+      // Check if bird (with tolerance) overlaps horizontally with pipe
+      const horizontalOverlap = birdRight > pipe.top.position.x && birdLeft < pipe.top.position.x + pipe.top.size.width;
+      
+      if (!horizontalOverlap) {
+        return false; // No horizontal overlap, no collision
+      }
+      
+      // Top pipe collision - bird's top hits the bottom of top pipe
+      const topPipeBottom = pipe.top.position.y + pipe.top.size.height;
+      const hitTopPipe = birdTop <= topPipeBottom;
+      
+      // Bottom pipe collision - bird's bottom hits the top of bottom pipe
+      const bottomPipeTop = pipe.bottom.position.y;
+      const hitBottomPipe = birdBottom >= bottomPipeTop;
+      
+      return hitTopPipe || hitBottomPipe;
+    });
+    
+    if (groundImpact || ceilingImpact || pipeImpact) {
       draft.bird.isFlying = false;
       draft.isStarted = false;
       draft.isGameOver = true;
